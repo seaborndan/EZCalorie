@@ -30,6 +30,8 @@ namespace EZ_Calorie
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IMealRepository, MealRepository>();
+            services.AddTransient<IExerciseRepository, ExerciseRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

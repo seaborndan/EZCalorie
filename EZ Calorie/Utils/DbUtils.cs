@@ -37,6 +37,23 @@ namespace EZ_Calorie.Utils
             return reader.GetInt32(reader.GetOrdinal(column));
         }
 
+        
+        public static decimal GetDecimalYee(SqlDataReader reader, string column)
+        {
+            return reader.GetDecimal(reader.GetOrdinal(column));
+        }
+
+        public static decimal? GetNullableDecimal(SqlDataReader reader, string column)
+        {
+            var ordinal = reader.GetOrdinal(column);
+            if (reader.IsDBNull(ordinal))
+            {
+                return null;
+            }
+
+            return reader.GetDecimal(ordinal);
+        }
+
         public static bool GetBool(SqlDataReader reader, string column)
         {
             return reader.GetBoolean(reader.GetOrdinal(column));

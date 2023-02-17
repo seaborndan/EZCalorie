@@ -22,7 +22,7 @@ namespace EZ_Calorie.Controllers
 
         [HttpGet("{firebaseUserId}")]
         [Authorize]
-        public IActionResult GetUser(string firebaseUserId)
+        public IActionResult GetUser(string firebaseUserId) 
         {
             return Ok(_userRepository.GetByFirebaseUserId(firebaseUserId));
         }
@@ -49,6 +49,51 @@ namespace EZ_Calorie.Controllers
                 return NotFound();
             }
             return Ok(userProfile);
+        }
+
+        [HttpGet("followers")]
+        public IActionResult GetFollowers()
+        {
+            var currentUser = GetCurrentUser();
+            return Ok(_userRepository.GetFollowers(currentUser.Id));
+        }
+
+        [HttpGet("following")]
+        public IActionResult GetFollowing()
+        {
+            var currentUser = GetCurrentUser();
+            return Ok(_userRepository.GetFollowing(currentUser.Id));
+        }
+
+        [HttpDelete("unfollow")]
+        public IActionResult Unfollow([FromQuery] int id) 
+        {
+            var currentUser = GetCurrentUser();
+            _userRepository.Unfollow(id, currentUser.Id);
+            return NoContent();
+        }
+
+        [HttpGet("followList")]
+        public IActionResult GetFollowList()
+        {
+            var currentUser = GetCurrentUser();
+            return Ok(_userRepository.GetFollowList(currentUser.Id));
+        }
+
+        [HttpPost("followUser")]
+        public IActionResult FollowUser([FromQuery] int followingId)
+        {
+
+            var currentUser = GetCurrentUser();
+            Follow follow = new Follow()
+            {
+                FollowerId = currentUser.Id,
+                FollowingId = followingId
+            };
+
+            _userRepository.FollowUser(follow);
+            return NoContent(); 
+
         }
 
 
@@ -82,6 +127,65 @@ namespace EZ_Calorie.Controllers
 
         }
 
+        [HttpPut("dispEdit")]
+        public IActionResult EditDisplayName([FromQuery] int id, [FromQuery] string oldName, [FromQuery] string newDisplayName)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (id != currentUser.Id)
+            {
+                return BadRequest();
+            }
+
+            _userRepository.EditDisplayName(id, oldName, newDisplayName);
+            return NoContent();
+
+        }
+
+        [HttpPut("currWeightEdit")]
+        public IActionResult EditCurrentWeight([FromQuery] int id, [FromQuery] int oldWeight, [FromQuery] int newWeight)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (id != currentUser.Id)
+            {
+                return BadRequest();
+            }
+
+            _userRepository.EditCurrWeight(id, oldWeight, newWeight);
+            return NoContent();
+
+        }
+
+        [HttpPut("currGoalEdit")]
+        public IActionResult EditGoalWeight([FromQuery] int id, [FromQuery] int oldGoal, [FromQuery] int newGoal)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (id != currentUser.Id)
+            {
+                return BadRequest();
+            }
+
+            _userRepository.EditGoalWeight(id, oldGoal, newGoal);
+            return NoContent();
+
+        }
+
+        [HttpPut("addGoalWeight")]
+
+        public IActionResult AddGoalWeight([FromQuery] int id, [FromQuery] int newGoal)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (id != currentUser.Id)
+            {
+                return BadRequest();
+            }
+
+            _userRepository.AddGoalWeight(id, newGoal);
+            return NoContent();
+        }
 
         private User GetCurrentUser()
         {

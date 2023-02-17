@@ -25,7 +25,7 @@ namespace EZ_Calorie.Models
         [Required]
         public decimal CurrentWeight { get; set; }
 
-        public decimal GoalWeight { get; set; }
+        public decimal? GoalWeight { get; set; }
 
         public decimal DailyCaloriesReqiored { get; set; }
 

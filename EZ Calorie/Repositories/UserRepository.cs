@@ -52,6 +52,174 @@ namespace EZ_Calorie.Repositories
             }
         }
 
+        public List<User> GetFollowList(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.GoalWeight, up.Email, up.UserRoleId,
+                               ff.FollowerId, ff.FollowingId
+                        FROM [User] up
+                               LEFT JOIN Follow ff on NOT ff.FollowingId = @id
+                        WHERE NOT up.Id = @id";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+
+                    var FollowList = new List<User>();
+
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        FollowList.Add(new User()
+                        {
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                            CurrentWeight = DbUtils.GetDecimalYee(reader, "CurrentWeight"),
+                            GoalWeight = DbUtils.GetDecimalYee(reader, "GoalWeight"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            UserRoleId = DbUtils.GetInt(reader, "UserRoleId"),
+                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                            UserRole = new UserRole()
+                            {
+
+                            }
+                        });
+                    }
+                    reader.Close();
+
+                    return FollowList;
+                }
+            }
+        }
+
+        public List<User> GetFollowers(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.GoalWeight, up.Email, up.UserRoleId,
+                               ff.FollowerId, ff.FollowingId
+                        FROM [User] up
+                               LEFT JOIN Follow ff on up.Id = ff.FollowerId
+                        WHERE ff.FollowingId = @id";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+
+                    var Followers = new List<User>();
+
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Followers.Add(new User()
+                        {
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                            CurrentWeight = DbUtils.GetDecimalYee(reader, "CurrentWeight"),
+                            GoalWeight = DbUtils.GetDecimalYee(reader, "GoalWeight"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            UserRoleId = DbUtils.GetInt(reader, "UserRoleId"),
+                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                            UserRole = new UserRole()
+                            {
+
+                            }
+                        });
+                    }
+                    reader.Close();
+
+                    return Followers;
+                }
+            }
+        }
+
+        public List<User> GetFollowing(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.GoalWeight, up.Email, up.UserRoleId,
+                               ff.FollowerId, ff.FollowingId
+                        FROM [User] up
+                               LEFT JOIN Follow ff on up.Id = ff.FollowingId
+                        WHERE ff.FollowerId = @id";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+
+                    var Following = new List<User>();
+
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Following.Add(new User()
+                        {
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                            CurrentWeight = DbUtils.GetDecimalYee(reader, "CurrentWeight"),
+                            GoalWeight = DbUtils.GetDecimalYee(reader, "GoalWeight"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            UserRoleId = DbUtils.GetInt(reader, "UserRoleId"),
+                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                            UserRole = new UserRole()
+                            {
+
+                            }
+                        });
+                    }
+                    reader.Close();
+
+                    return Following;
+                }
+            }
+        }
+
+        public void FollowUser(Follow follow)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                        cmd.CommandText = @"INSERT INTO Follow (FollowerId, FollowingId)
+                                        OUTPUT INSERTED.ID
+                                        VALUES (@id, @followingId)";
+                    DbUtils.AddParameter(cmd, "@id", follow.FollowerId);
+                    DbUtils.AddParameter(cmd, "@followingId", follow.FollowingId);
+
+
+                    follow.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        public void Unfollow(int id, int currentUserId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        DELETE FROM Follow WHERE FollowingId = @id AND FollowerId = @currentUserId
+                    ";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    DbUtils.AddParameter(cmd, "@currentUserId", currentUserId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public User GetByEmail(string email)
         {
             using (var conn = Connection)
@@ -60,7 +228,7 @@ namespace EZ_Calorie.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.Email, up.UserRoleId,
+                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.GoalWeight, up.Email, up.UserRoleId,
                                uu.Name AS UserRoleName
                         FROM [User] up
                                LEFT JOIN UserRole uu on up.UserRoleId = uu.Id
@@ -80,6 +248,8 @@ namespace EZ_Calorie.Repositories
                             DisplayName = DbUtils.GetString(reader, "DisplayName"),
                             Email = DbUtils.GetString(reader, "Email"),
                             UserRoleId = DbUtils.GetInt(reader, "UserRoleId"),
+                            CurrentWeight = DbUtils.GetDecimalYee(reader, "CurrentWeight"),
+                            GoalWeight = DbUtils.GetNullableDecimal(reader, "GoalWeight"),
                             UserRole = new UserRole()
                             {
                                 Id = DbUtils.GetInt(reader, "UserRoleId"),
@@ -142,6 +312,94 @@ namespace EZ_Calorie.Repositories
                     DbUtils.AddParameter(cmd, "@DailyCaloriesRequired", userProfile.DailyCaloriesReqiored);
                     DbUtils.AddParameter(cmd, "@userRoleId", userProfile.UserRoleId);
                     DbUtils.AddParameter(cmd, "@id", userProfile.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void EditDisplayName(int id, string oldName, string newDisplayName)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE [User]
+                        SET [DisplayName] = @NewDisplayName
+                        WHERE Id = @Id
+                    ";
+
+                    DbUtils.AddParameter(cmd, "@NewDisplayName", newDisplayName);
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void EditCurrWeight(int id, int oldWeight, int newWeight)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE [User]
+                        SET [CurrentWeight] = @NewWeight
+                        WHERE Id = @Id
+                    ";
+
+                    DbUtils.AddParameter(cmd, "@NewWeight", newWeight);
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void EditGoalWeight(int id, int oldGoal, int newGoal)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE [User]
+                        SET [GoalWeight] = @NewGoal
+                        WHERE Id = @Id
+                    ";
+
+                    DbUtils.AddParameter(cmd, "@NewGoal", newGoal);
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void AddGoalWeight(int id, int newGoal)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE [User]
+                        SET [GoalWeight] = @NewGoal
+                        WHERE Id = @Id
+                    ";
+
+                    DbUtils.AddParameter(cmd, "@NewGoal", newGoal);
+                    DbUtils.AddParameter(cmd, "@Id", id);
 
                     cmd.ExecuteNonQuery();
                 }
