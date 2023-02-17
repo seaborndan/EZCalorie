@@ -6,11 +6,12 @@ import React, { useEffect, useState } from "react";
 export default function Follower ({follower}) {
   return (
   <>
-    <Col className='mb-5'>
+    <Col className='mb-2'>
       {follower.displayName}
       <br></br>
     
-      <p>Current Weight: {follower.currentWeight} Goal Weight: {follower.goalWeight} </p>
+      <p className='pt-2'>Current Weight: {follower.currentWeight}</p>
+      <p> Goal Weight: {follower.goalWeight} </p>
     </Col>
   </>
   )

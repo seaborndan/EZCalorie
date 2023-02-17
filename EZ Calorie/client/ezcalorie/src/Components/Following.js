@@ -11,8 +11,9 @@ export default function Following ({following}) {
     <Col>
       {following?.displayName}
       <br></br>
-      <p>Current Weight: {following?.currentWeight} Goal Weight: {following?.goalWeight} </p>
-      <Button onClick={() => { Unfollow(following.id).then(window.location.reload()) }}>Unfollow</Button>
+      <p className='pt-2'>Current Weight: {following?.currentWeight}</p>
+      <p> Goal Weight: {following?.goalWeight} </p>
+      <Button id="delete-button" onClick={() => { Unfollow(following.id).then(window.location.reload()) }}>Unfollow</Button>
     </Col>
   </>
   )

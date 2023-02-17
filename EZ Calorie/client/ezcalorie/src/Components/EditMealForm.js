@@ -22,30 +22,37 @@ export default function EditMeal (props) {
     <>
       <h2>Edit Your Meal: {location.state.name}</h2>
             <Form onSubmit={submitMealEdit}>
-            <FormGroup>
+            <FormGroup className='text-center'>
                 <Label htmlFor="title">Name</Label>
-                <Input name="name"
-                type="text" placeholder='Enter new name here'
-                onChange={(e) => setMealName(e.target.value)}
-                />
+                <Col className="d-flex justify-content-center">
+                  <Input name="name"
+                  type="text" className='text-center' placeholder='Enter new name here'
+                  onChange={(e) => setMealName(e.target.value)}
+                  />
+                </Col>
             </FormGroup>
+            
             <FormGroup>
                 <Label htmlFor="content">Calories</Label>
-                <Input name="content"
-                type="textarea" placeholder='Enter caloric value'
-                onChange={(e) => setMealCalories(e.target.value)}/>
+                <Col className="d-flex align-items-end justify-content-center">
+                  <Input name="content"
+                  type="textarea" className='text-center' placeholder='Enter caloric value'
+                  onChange={(e) => setMealCalories(e.target.value)}/>
+                </Col>
             </FormGroup>
+
             <FormGroup>
                 <Label htmlFor="imageLocation">Meal Type</Label>
-                <Input name="imageLocation"
-                type="text" placeholder='Set Meal Type: 1 for breakfast, 2 for lunch, 3 for dinner, 4 for snack'
-                onChange={(e) => setMealTypeId(e.target.value)}/>
+                <Col className="d-flex align-items-end justify-content-center">
+                  <Input name="imageLocation"
+                  type="text" className='text-center' placeholder='Set Meal Type: 1 for breakfast, 2 for lunch, 3 for dinner, 4 for snack'
+                  onChange={(e) => setMealTypeId(e.target.value)}/>
+                </Col>
             </FormGroup>  
-            <Button
-                id="post-save-btn"
-                color="success">
-                    Save
-                </Button>
+
+            <Button className='hover-zoom' id="post-save-btn">
+                Save
+            </Button>
 
             </Form>
     </>

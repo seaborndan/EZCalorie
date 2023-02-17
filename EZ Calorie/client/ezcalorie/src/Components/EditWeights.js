@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useLocation } from 'react-router-dom'
 import { Button, Container, Form, FormGroup, Input, Label, Table } from "reactstrap";
 import { addUserGoalWeight, editUserCurrentWeight, editUserGoalWeight } from "../modules/userManager";
-
+import Col from 'react-bootstrap/Col';
 
 
 
@@ -87,13 +87,17 @@ export default function EditWeights(props) {
         <Form onSubmit={editUser}>
           <FormGroup>
             <Label htmlFor="displayName">Current Weight</Label>
+            <Col className="d-flex align-items-end justify-content-center">
             <Input name="displayName" className="w-auto" placeholder={user.currentWeight} value={newCurrWeight} onChange={changeCurrWeightState}></Input>
+            </Col>
           </FormGroup>
           <FormGroup>
             <Label htmlFor="displayName">Goal</Label>
+            <Col className="d-flex align-items-end justify-content-center">
             <Input name="displayName" className="w-auto" placeholder={user.goalWeight} value={newGoalWeight} onChange={changeGoalWeightState}></Input>
+            </Col>
           </FormGroup>
-          <Button id="edit-save-btn" color="success">Save</Button>  
+          <Button id="post-save-btn">Save</Button>  
         </Form>
     </div>
     

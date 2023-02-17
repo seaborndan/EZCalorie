@@ -18,15 +18,15 @@ export default function EditPersonalDetails(props) {
   console.log(location.state.currUser.id);
 
   useEffect(() => {
-    document.getElementById("edit-save-btn").disabled = true
+    document.getElementById("post-save-btn").disabled = true
   }, [])
 
   const changeDisplayNameState = (e) => {
     if (e.target.value.trim() === "" || e.target.value === null) {
         // Disable the save button if input is empty
-        document.getElementById("edit-save-btn").disabled = true
+        document.getElementById("post-save-btn").disabled = true
     } else {
-        document.getElementById("edit-save-btn").disabled = e.target.value === currUser.displayName
+        document.getElementById("post-save-btn").disabled = e.target.value === currUser.displayName
     }
     setNewDispName(e.target.value)
   }
@@ -34,9 +34,9 @@ export default function EditPersonalDetails(props) {
   const changeHeightState = (e) => {
     if (e.target.value.trim() === "" || e.target.value === null) {
         // Disable the save button if input is empty
-        document.getElementById("edit-save-btn").disabled = true
+        document.getElementById("post-save-btn").disabled = true
     } else {
-        document.getElementById("edit-save-btn").disabled = e.target.value === currUser.displayName
+        document.getElementById("post-save-btn").disabled = e.target.value === currUser.displayName
     }
     setNewHeight(e.target.value)
   }
@@ -56,19 +56,25 @@ export default function EditPersonalDetails(props) {
   }
 
   return (
-    <div className="m-4">
+    <div className="m-4 w-100">
 
         <h1>Editing User: {user ? user.displayName : "Hello"}</h1>
-        <Form onSubmit={editUser}>
-          <FormGroup>
+        <Form onSubmit={editUser} color="info" className="square border">
+          <FormGroup color="info" className="flex">
             <Label htmlFor="displayName">Display Name</Label>
-            <Input name="displayName" className="w-auto" placeholder={user.displayName} value={newDispName} onChange={changeDisplayNameState}></Input>
+            <Col className="d-flex align-items-end justify-content-center">
+              <Input name="displayName" className="w-auto ml-5" placeholder={user.displayName} value={newDispName} onChange={changeDisplayNameState}></Input>
+            </Col>
           </FormGroup>
+
           <FormGroup>
             <Label htmlFor="newHeight">Height</Label>
-            <Input name="newHeight" className="w-auto" placeholder={user.height} value={newHeight} onChange={changeHeightState}></Input>
+            <Col className="d-flex align-items-end justify-content-center">
+              <Input name="newHeight" className="w-auto" placeholder={user.height} value={newHeight} onChange={changeHeightState}></Input>
+            </Col>
           </FormGroup>
-          <Button id="edit-save-btn" color="success">Save</Button>  
+
+          <Button id="post-save-btn">Save</Button>  
         </Form>
     </div>
     

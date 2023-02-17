@@ -1,0 +1,23 @@
+#post-save-btn:hover{
+  background-color: #472f6d;
+}
+
+#post-save-btn{
+  background-color: #563D7C;
+}
+
+#delete-button:hover{
+  background-color: #972243;
+}
+
+#edit-button:hover{
+  background-color: #E4A11B;
+}
+
+#add-button:hover{
+  background-color: #472f6d;
+}
+
+#add-button{
+  background-color: #563D7C;
+}

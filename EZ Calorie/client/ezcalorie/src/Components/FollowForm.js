@@ -7,7 +7,7 @@ import { Button } from 'reactstrap';
 import FollowListing from './FollowListing';
 export default function FollowForm () {
   const [potentialFollowers, setPotentialFollowers] = useState([]);
-
+  
   useEffect(() => {
     getFollowList().then(followers =>
     setPotentialFollowers(followers));

@@ -12,8 +12,6 @@ import Exercise from "./Exercise";
 import Follower from "./Follower";
 import Following from "./Following";
 import { Button } from "reactstrap";
-
-
 export default function HomePage() {
   const [currUser, setCurrUser] = useState({});
   const [meals, setMeals] = useState([]);
@@ -127,47 +125,61 @@ export default function HomePage() {
     
   }
   return (
-    <>
-      <h1>Welcome To Your EZ Calorie Profile</h1>
+      <div id="bg-img" style={{ 
+      backgroundImage: `url("https://www.troiafoods.com/wp-content/uploads/2022/11/237A3124-1-scaled-1.jpeg")`
+      }}>
+      
+      <div id="home-row" className="border rounded" color="white">
+        <h1>Welcome To Your EZ Calorie Profile</h1>
+      </div>
       <Container>
-        <Row className="justify-content-md-left h-100">
+        <Row id="home-row" color="white" className="justify-content-md-left h-100 border rounded-3">
           {/* Left column of homepage display */}
-          <Col xs lg="6" className="square border">
+          <Col xs lg="6">
             <h2>{currUser.displayName}</h2>
             <Col className="d-flex align-items-end justify-content-center" style={{ height: "200px" }}>
             <h4>{message}</h4>
             
             </Col>
-          <p className="mt-5">See who's following you!</p>
+          <h3 className="mt-5">See who's following you!</h3>
           {/* Map through users that follow the current user */}
           {followers.map((f) => (
             <Follower key = {f.id} follower={f} />
           ))}
           {/* Map through users followed by the current user */}
-          <p>Users you are following:</p>
+          <h3>Users you are following:</h3>
           {following.map((f) => (
             <Following key = {f.id} following={f} />
           ))}
           
-          <Link to={"/followForm"}><p>Follow someone new!</p></Link>
+          <Link to={"/followForm"}>
+            <Button className="mt-4" id="post-save-btn" size="lg">
+              Follow Someone New!
+            </Button></Link>
+            <br></br>
+            <Link to="/editPersonal" state={{currUser: currUser}}>
+              <Button size="lg" className="mt-5" id="post-save-btn">Edit Personal Details</Button>
+            </Link>
           </Col>
           {/* Right column of homepage display */}
-          <Col className="square border h-100" xs lg="6"><h2>Tracking Your Progress</h2>
+          <Col className="" xs lg="6"><h2>Tracking Your Progress</h2>
           {displayCaloriesNeeded()}
-            <Row>
+            <Row className="border rounded-top mt-5 p-2">
               <h4>Net Calories Today: {netCalories}</h4>
               <Col>
-              <Col className="d-flex align-items-end justify-content-center" style={{ height: "200px" }} >Your Current Weight!
+              <Col className="d-flex align-items-end justify-content-center" >Your Current Weight!
               </Col>
               {currUser.currentWeight}
               </Col>
               <Col>
-              <Col className="d-flex align-items-end justify-content-center" style={{ height: "200px" }}>Your Goal Weight! 
+              <Col className="d-flex align-items-end justify-content-center">Your Goal Weight! 
               </Col>
               {currUser.goalWeight}</Col>
-              <Link to="/editWeights" state={{currUser: currUser}}>Edit Weights</Link>
+              <Link to="/editWeights" state={{currUser: currUser}}>
+                <Button id="post-save-btn">Edit Weights</Button>
+              </Link>
             </Row>
-            <Row className="justify-content-md-left h-100 mt-5">
+            <Row className="justify-content-md-left  square border">
               <Col>
                 <h2>Your Meals Today</h2>
                 <Row>
@@ -180,13 +192,15 @@ export default function HomePage() {
                 </Row>
                 
                 <br></br>
-                <Link to="/addMeal">Add Meal</Link>
-                <h4>Total Calories Consumed: {totalCaloriesConsumed}</h4>
+                <Link to="/addMeal">
+                  <Button size="lg" id="add-button">Add Meal</Button>
+                </Link>
+                <h4 className="mt-2">Total Calories Consumed: {totalCaloriesConsumed}</h4>
                 
               </Col>
               
             </Row>
-            <Row className="justify-content-md-left h-100 mt-5">
+            <Row className="justify-content-md-left">
               <Col>
                 <h2>Your Exercises Today</h2>
                 <Row>
@@ -196,7 +210,9 @@ export default function HomePage() {
                   ))}
                   
                 </Row>
-                <Link to={"/exerciseForm"}>Add Exercise</Link>
+                <Link to={"/exerciseForm"}>
+                  <Button size="lg" className="mt-2 mb-2"id="add-button">Add Exercise</Button>
+                </Link>
                 <br></br>
                 <h4>Total Calories Burned: {totalCaloriesBurned}</h4>
               </Col>
@@ -206,17 +222,13 @@ export default function HomePage() {
 
         </Row>
         <Row>
-          <Col sm={6} xs={6}>
-            <Link to="/editPersonal" state={{currUser: currUser}}>Edit Personal Details</Link>
-          </Col>
-          <Col sm={6}>
-            
-            </Col>
+
         </Row>
 
         
       </Container>
-    </>
+
+    </div>
   );
   
 }
