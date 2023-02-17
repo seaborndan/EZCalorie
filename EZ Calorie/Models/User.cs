@@ -33,5 +33,7 @@ namespace EZ_Calorie.Models
         public int UserRoleId { get; set; }
         public UserRole UserRole { get; set; }
 
+        public decimal Height { get; set; }
+
     }
 }

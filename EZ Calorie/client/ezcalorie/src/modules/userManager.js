@@ -14,9 +14,9 @@ export const _getByEmail = (email) => {
     }).then(resp => resp.json()));
 };
 
-export const editUserDisplayName = (id, oldName, newDispName) => {
+export const editPersonalDetails = (id, oldName, newDispName, oldHeight, newHeight) => {
   return getToken().then(token => {
-      return fetch(`${_apiUrl}/dispEdit?id=${id}&oldName=${oldName}&newDisplayName=${newDispName}`, {
+      return fetch(`${_apiUrl}/personalEdit?id=${id}&oldName=${oldName}&newDisplayName=${newDispName}&oldHeight=${oldHeight}&newHeight=${newHeight}`, {
           method: "PUT",
           headers: {
               Authorization: `Bearer ${token}`,
@@ -119,6 +119,10 @@ export const getFollowing = () => {
   });
 };
 
+
+/* 
+  Function for making http request to api to follow a given user based on their id
+*/
 export const Follow = (followingId) => {
   return getToken().then(token => {
     return fetch(`${_apiUrl}/followUser?followingId=${followingId}`, {
@@ -130,6 +134,9 @@ export const Follow = (followingId) => {
   })
 }
 
+/* 
+  Function for making http request to api for unfollowing a user based on their id
+*/
 export const Unfollow = (followingId) => {
   return getToken().then(token => {
       return fetch(`${_apiUrl}/unfollow?id=${followingId}`, {

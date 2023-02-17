@@ -127,8 +127,8 @@ namespace EZ_Calorie.Controllers
 
         }
 
-        [HttpPut("dispEdit")]
-        public IActionResult EditDisplayName([FromQuery] int id, [FromQuery] string oldName, [FromQuery] string newDisplayName)
+        [HttpPut("personalEdit")]
+        public IActionResult EditPersonalDetails([FromQuery] int id, [FromQuery] string oldName, [FromQuery] string newDisplayName, [FromQuery] decimal oldHeight, [FromQuery] decimal newHeight)
         {
             var currentUser = GetCurrentUser();
 
@@ -137,7 +137,7 @@ namespace EZ_Calorie.Controllers
                 return BadRequest();
             }
 
-            _userRepository.EditDisplayName(id, oldName, newDisplayName);
+            _userRepository.EditPersonalDetails(id, oldName, newDisplayName, oldHeight, newHeight);
             return NoContent();
 
         }

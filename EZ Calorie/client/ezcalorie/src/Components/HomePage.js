@@ -95,24 +95,24 @@ export default function HomePage() {
   useEffect(() => {
         /* 
       tdee is calcuated by 66 + (13.7 X weight in kg) + (5 x height in cm) – (6.8 x age in yrs) * 1.55.
-      used 5'9 as average height until height property is implemented, 25 as age
+      used 25 as age
       Added 200 for caloric surplus needed to gain weight
       Used moderately active modifier (1.55) in equation
     */
     var tdee = 0;
-    tdee = Math.round((66 + (13.7 * (currUser.currentWeight/2.2) + (5 * 175.259) -(6.8 * 25))) * 1.55 + 200) ;
+    tdee = Math.round((66 + (13.7 * (currUser.currentWeight/2.2) + (5 * currUser.height) -(6.8 * 25))) * 1.55 + 200) ;
     setCaloriesNeededToGain(tdee)
   })
 
   useEffect(() => {
     /* 
       tdee is calcuated by 66 + (13.7 X weight in kg) + (5 x height in cm) – (6.8 x age in yrs).
-      used 5'9 as average height until height property is implemented, 25 as age
+      used 25 as age
       Subtracted 200 needed for caloric deficit
       Used moderately active modifier (1.55) in equation
     */
     var tdee = 0;
-    tdee = Math.round((66 + (13.7 * (currUser.currentWeight/2.2) + (5 * 175.259) -(6.8 * 25))) * 1.55 - 200);
+    tdee = Math.round((66 + (13.7 * (currUser.currentWeight/2.2) + (5 * currUser.height) -(6.8 * 25))) * 1.55 - 200);
     setCaloriesNeededToLose(tdee)
     
   })
@@ -128,11 +128,10 @@ export default function HomePage() {
   }
   return (
     <>
-    
-      
       <h1>Welcome To Your EZ Calorie Profile</h1>
       <Container>
         <Row className="justify-content-md-left h-100">
+          {/* Left column of homepage display */}
           <Col xs lg="6" className="square border">
             <h2>{currUser.displayName}</h2>
             <Col className="d-flex align-items-end justify-content-center" style={{ height: "200px" }}>
@@ -152,6 +151,7 @@ export default function HomePage() {
           
           <Link to={"/followForm"}><p>Follow someone new!</p></Link>
           </Col>
+          {/* Right column of homepage display */}
           <Col className="square border h-100" xs lg="6"><h2>Tracking Your Progress</h2>
           {displayCaloriesNeeded()}
             <Row>

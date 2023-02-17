@@ -10,7 +10,7 @@ namespace EZ_Calorie.Repositories
         void Update(User userProfile);
         User GetByEmail(string email);
 
-        void EditDisplayName(int id, string oldName, string newDisplayName);
+        void EditPersonalDetails(int id, string oldName, string newDisplayName, decimal oldHeight, decimal newHeight);
 
         void EditGoalWeight(int id, int oldGoal, int newGoal);
 

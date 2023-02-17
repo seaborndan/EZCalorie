@@ -18,7 +18,7 @@ namespace EZ_Calorie.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.Email, up.UserRoleId,
+                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.Email, up.UserRoleId, up.Height,
                                uu.Name AS UserRoleName
                         FROM [User] up
                                LEFT JOIN UserRole uu on up.UserRoleId = uu.Id
@@ -228,7 +228,7 @@ namespace EZ_Calorie.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.GoalWeight, up.Email, up.UserRoleId,
+                        SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.CurrentWeight, up.GoalWeight, up.Email, up.UserRoleId, up.Height,
                                uu.Name AS UserRoleName
                         FROM [User] up
                                LEFT JOIN UserRole uu on up.UserRoleId = uu.Id
@@ -250,6 +250,7 @@ namespace EZ_Calorie.Repositories
                             UserRoleId = DbUtils.GetInt(reader, "UserRoleId"),
                             CurrentWeight = DbUtils.GetDecimalYee(reader, "CurrentWeight"),
                             GoalWeight = DbUtils.GetNullableDecimal(reader, "GoalWeight"),
+                            Height = DbUtils.GetDecimalYee(reader, "Height"),
                             UserRole = new UserRole()
                             {
                                 Id = DbUtils.GetInt(reader, "UserRoleId"),
@@ -318,7 +319,7 @@ namespace EZ_Calorie.Repositories
             }
         }
 
-        public void EditDisplayName(int id, string oldName, string newDisplayName)
+        public void EditPersonalDetails(int id, string oldName, string newDisplayName, decimal oldHeight, decimal newHeight)
         {
             using (SqlConnection conn = Connection)
             {
@@ -328,11 +329,12 @@ namespace EZ_Calorie.Repositories
                 {
                     cmd.CommandText = @"
                         UPDATE [User]
-                        SET [DisplayName] = @NewDisplayName
+                        SET [DisplayName] = @NewDisplayName, Height = @NewHeight
                         WHERE Id = @Id
                     ";
 
                     DbUtils.AddParameter(cmd, "@NewDisplayName", newDisplayName);
+                    DbUtils.AddParameter(cmd, "@NewHeight", newHeight);
                     DbUtils.AddParameter(cmd, "@Id", id);
 
                     cmd.ExecuteNonQuery();

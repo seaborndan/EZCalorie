@@ -4,12 +4,13 @@ import { useLocation } from 'react-router-dom'
 import { Button, Container, Form, FormGroup, Input, Label, Table } from "reactstrap";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { editUserDisplayName, _getByEmail } from "../modules/userManager";
+import { editPersonalDetails, editUserDisplayName, _getByEmail } from "../modules/userManager";
 
 
 export default function EditPersonalDetails(props) {
   const [currUser, setCurrUser] = useState({});
   const [newDispName, setNewDispName] = useState();
+  const [newHeight, setNewHeight] = useState();
   const location = useLocation();
   const navigate = useNavigate();
   const user = location.state.currUser;
@@ -30,12 +31,22 @@ export default function EditPersonalDetails(props) {
     setNewDispName(e.target.value)
   }
 
+  const changeHeightState = (e) => {
+    if (e.target.value.trim() === "" || e.target.value === null) {
+        // Disable the save button if input is empty
+        document.getElementById("edit-save-btn").disabled = true
+    } else {
+        document.getElementById("edit-save-btn").disabled = e.target.value === currUser.displayName
+    }
+    setNewHeight(e.target.value)
+  }
+
   const editUser = (e) => {
     e.preventDefault();
     var newDisplayName = newDispName;
 
     if(user.displayName) {
-      editUserDisplayName(user.id, user.displayName, newDisplayName)
+      editPersonalDetails(user.id, user.displayName, newDisplayName, user.height, newHeight)
         .then(res => {
           if(res.ok) {
             navigate("/")
@@ -53,7 +64,11 @@ export default function EditPersonalDetails(props) {
             <Label htmlFor="displayName">Display Name</Label>
             <Input name="displayName" className="w-auto" placeholder={user.displayName} value={newDispName} onChange={changeDisplayNameState}></Input>
           </FormGroup>
-          <Button id="edit-save-btn" color="success">Save</Button>
+          <FormGroup>
+            <Label htmlFor="newHeight">Height</Label>
+            <Input name="newHeight" className="w-auto" placeholder={user.height} value={newHeight} onChange={changeHeightState}></Input>
+          </FormGroup>
+          <Button id="edit-save-btn" color="success">Save</Button>  
         </Form>
     </div>
     
